@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.kgpsoft.mobile.app.ws.exceptions.UserServiceException;
 import io.kgpsoft.mobile.app.ws.service.UserService;
 import io.kgpsoft.mobile.app.ws.shared.dto.UserDto;
 import io.kgpsoft.mobile.app.ws.ui.model.request.UserDetailsRequestModel;
+import io.kgpsoft.mobile.app.ws.ui.model.response.ErrorMessages;
 import io.kgpsoft.mobile.app.ws.ui.model.response.UserResponse;
 
 @RestController
@@ -24,9 +26,12 @@ public class UserController {
 
 	@PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public UserResponse createUser(@RequestBody UserDetailsRequestModel userDetails) {
+	public UserResponse createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 
 		UserResponse returnUser = new UserResponse();
+
+		if (userDetails.getFirstName().isEmpty())
+			throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
 		UserDto userDto = new UserDto();
 
@@ -39,7 +44,7 @@ public class UserController {
 		return returnUser;
 	}
 
-	@GetMapping(path = "/{id}", produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public UserResponse getUser(@PathVariable String id) {
 
 		UserResponse returnUser = new UserResponse();
