@@ -1,4 +1,4 @@
-package io.kgpsoft.mobile.app.ws.ui.request;
+package io.kgpsoft.mobile.app.ws.ui.model.request;
 
 public class UserDetailsRequestModel {
 	
@@ -7,8 +7,9 @@ public class UserDetailsRequestModel {
 	private String email;
 	private String password;
 	
-	
-	
+	public UserDetailsRequestModel() {
+		super();
+	}
 	
 	
 	public UserDetailsRequestModel(String firstName, String lastName, String email, String password) {
@@ -18,16 +19,6 @@ public class UserDetailsRequestModel {
 		this.email = email;
 		this.password = password;
 	}
-	
-	
-	public UserDetailsRequestModel() {
-		super();
-	}
-
-
-
-
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -37,7 +28,7 @@ public class UserDetailsRequestModel {
 	public String getLastName() {
 		return lastName;
 	}
-	public void setLastname(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	public String getEmail() {
