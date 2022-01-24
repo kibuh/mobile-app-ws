@@ -3,6 +3,8 @@ package io.kgpsoft.mobile.app.ws.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import io.kgpsoft.mobile.app.ws.io.entity.UserEntity;
 import io.kgpsoft.mobile.app.ws.io.repository.UserRepository;
 import io.kgpsoft.mobile.app.ws.service.UserService;
 import io.kgpsoft.mobile.app.ws.shared.Utils;
+import io.kgpsoft.mobile.app.ws.shared.dto.AddressDto;
 import io.kgpsoft.mobile.app.ws.shared.dto.UserDto;
 import io.kgpsoft.mobile.app.ws.ui.model.response.ErrorMessages;
 
@@ -40,9 +43,32 @@ public class UserServiceImpl implements UserService {
 		UserEntity storedEntity = userRepository.findByEmail(user.getEmail());
 		if (storedEntity != null)
 			throw new RuntimeException("Record already exists");
+		
+		
+		for(int i =0; i< user.getAddresses().size(); i++) {
+			
+			AddressDto address = user.getAddresses().get(i);
+			
+			address.setUserDetails(user);
+			address.setAddressId(userUtils.generateAddressId(30));
+			
+			user.getAddresses().set(i,address);
+			
+		}
 
-		UserEntity userEntity = new UserEntity();
-		BeanUtils.copyProperties(user, userEntity);
+		ModelMapper modelMapper = new ModelMapper();
+		
+//		UserEntity userEntity = new UserEntity();
+//		BeanUtils.copyProperties(user, userEntity);
+		
+		
+//		modelMapper.typeMap(UserDto.class, UserEntity.class).addMappings(mapper -> {
+//			  mapper.map(src -> src.getAddresses(),
+//					  UserEntity::setAddresses);
+//			  
+//			});
+		
+		UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
 		userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		String userId = userUtils.generateUserId(30);
@@ -50,10 +76,12 @@ public class UserServiceImpl implements UserService {
 
 		UserEntity createdUserEntity = userRepository.save(userEntity);
 
-		UserDto userDto = new UserDto();
-
-		BeanUtils.copyProperties(createdUserEntity, userDto);
-
+//		UserDto userDto = new UserDto();
+//		BeanUtils.copyProperties(createdUserEntity, userDto);
+		
+		UserDto userDto = modelMapper.map(createdUserEntity, UserDto.class);
+		
+		
 		return userDto;
 	}
 

@@ -1,12 +1,15 @@
 package io.kgpsoft.mobile.app.ws.io.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity(name="user")
 public class UserEntity implements Serializable {
@@ -36,8 +39,11 @@ public class UserEntity implements Serializable {
 	@Column(nullable=true)
 	private Boolean emailVerificationStatus;
 
+	@OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL)
+	private List<AddressEntity> addresses;
+	
 	public UserEntity() {
-		super();
+	
 	}
 
 	public UserEntity(Long id, String userId, String firstName, String lastName, String email, String encryptedPassword,
@@ -117,4 +123,13 @@ public class UserEntity implements Serializable {
 		this.emailVerificationStatus = emailVerificationStatus;
 	}
 
+	public List<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressEntity> addresses) {
+		this.addresses = addresses;
+	}
+
+	
 }

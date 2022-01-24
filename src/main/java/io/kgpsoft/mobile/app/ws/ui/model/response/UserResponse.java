@@ -1,6 +1,7 @@
 package io.kgpsoft.mobile.app.ws.ui.model.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserResponse implements Serializable {
 
@@ -10,6 +11,18 @@ public class UserResponse implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String email;
+	
+	private List<AddressResponse> addresses;
+	
+	public List<AddressResponse> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressResponse> addresses) {
+		this.addresses = addresses;
+	}
+
+	
 	
 	public UserResponse(String userId, String firstName, String lastName, String email) {
 		super();
