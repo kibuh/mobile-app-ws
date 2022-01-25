@@ -1,6 +1,8 @@
 package io.kgpsoft.mobile.app.ws.ui.model.response;
 
-public class AddressResponse {
+import org.springframework.hateoas.RepresentationModel;
+
+public class AddressResponse extends RepresentationModel {
 
 	private String addressId;
 	private String city;
